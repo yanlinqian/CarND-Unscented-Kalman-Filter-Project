@@ -28,7 +28,7 @@ UKF::UKF() {
   std_a_ = 2;
 
   // Process noise standard deviation yaw acceleration in rad/s^2
-  std_yawdd_ = 0.15;
+  std_yawdd_ = 0.30;
 
   // Laser measurement noise standard deviation position1 in m
   std_laspx_ = 0.15;
@@ -138,6 +138,10 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
                 float ro_dot = meas_package.raw_measurements_(2);
                 x_(0) = ro     * cos(phi);
                 x_(1) = ro     * sin(phi);
+                
+                float vx = ro_dot * cos(phi);
+                float vy = ro_dot * sin(phi);
+                x_(2) =sqrt(vx*vx+vy*vy);
             }
             
             // done initializing, no need to predict or update
